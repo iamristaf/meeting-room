@@ -12,7 +12,6 @@ import useFetch from '../hooks/useFetch'
 import resourceService from '../services/resourceService'
 import bookingService from '../services/bookingService'
 import { bookPath } from '../utils/paths'
-import { BOOKING_STATUS } from '../utils/constants'
 import {
   addDays,
   addMonths,
@@ -72,13 +71,7 @@ export default function CalendarPage() {
 
   const { data: bookingData, loading, error, reload } = useFetch(loadBookings)
 
-  const bookings = useMemo(
-    () =>
-      (bookingData ?? []).filter(
-        (booking) => booking.status === BOOKING_STATUS.confirmed,
-      ),
-    [bookingData],
-  )
+  const bookings = bookingData ?? []
 
   const activeResources = useMemo(
     () =>

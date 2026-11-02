@@ -147,8 +147,14 @@ export async function listUserBookings(userId) {
   return rows
 }
 
-export async function listBookingsInRange({ from, to, resourceId }) {
-  const params = [from, to]
+export async function listBookingsInRange({
+  from,
+  to,
+  resourceId,
+  includeCancelled = false,
+}) {
+  const statuses = includeCancelled ? ['confirmed', 'cancelled'] : ['confirmed']
+  const params = [from, to, statuses]
   let resourceFilter = ''
 
   if (resourceId) {
@@ -162,7 +168,7 @@ export async function listBookingsInRange({ from, to, resourceId }) {
 
   const { rows } = await pool.query(
     `${baseSelect}
-     where b.status = 'confirmed' and b.parent_booking_id is null and b.start_time < $2 and b.end_time > $1 ${resourceFilter}
+     where b.status = any($3::text[]) and b.parent_booking_id is null and b.start_time < $2 and b.end_time > $1 ${resourceFilter}
      order by b.start_time`,
     params,
   )

@@ -24,7 +24,10 @@ export async function listAll(req, res) {
 export async function listCalendar(req, res) {
   res.json(
     await presentCalendar(
-      await listBookingsInRange(req.validated.query),
+      await listBookingsInRange({
+        ...req.validated.query,
+        includeCancelled: req.user.role === 'admin',
+      }),
       req.user,
     ),
   )

@@ -1,9 +1,12 @@
+import cn from '../../utils/cn'
 import {
   CALENDAR_END_HOUR,
   CALENDAR_START_HOUR,
   HOUR_HEIGHT,
 } from '../../utils/constants'
 import { formatTimeRange } from '../../utils/dateTime'
+import { getDisplayStatus } from '../../utils/booking'
+import { BOOKING_STATUS } from '../../utils/constants'
 
 const minuteHeight = HOUR_HEIGHT / 60
 const gridStart = CALENDAR_START_HOUR * 60
@@ -24,12 +27,19 @@ export default function BookingBlock({ item, label, onSelect }) {
   if (end <= start) return null
 
   const widthPercent = 100 / laneCount
+  const status = getDisplayStatus(booking)
+  const cancelled = status === BOOKING_STATUS.cancelled
+  const completed = status === BOOKING_STATUS.completed
 
   return (
     <button
       type="button"
       onClick={() => onSelect(booking)}
-      className="absolute box-border overflow-hidden event-block rounded-md border px-1.5 py-1 text-left text-xs transition-shadow hover:shadow-card focus-visible:outline-2 focus-visible:outline-brand"
+      className={cn(
+        'absolute box-border overflow-hidden event-block rounded-md border px-1.5 py-1 text-left text-xs transition-shadow hover:shadow-card focus-visible:outline-2 focus-visible:outline-brand',
+        completed && 'opacity-70',
+        cancelled && 'border-dashed opacity-50',
+      )}
       style={{
         '--hue': hueFor(booking.resourceId),
         top: (start - gridStart) * minuteHeight + 1,
@@ -38,7 +48,11 @@ export default function BookingBlock({ item, label, onSelect }) {
         width: `calc(${widthPercent}% - 4px)`,
       }}
     >
-      <span className="block truncate font-bold">{label}</span>
+      <span
+        className={cn('block truncate font-bold', cancelled && 'line-through')}
+      >
+        {label}
+      </span>
       <span className="block truncate opacity-80">
         {formatTimeRange(booking.startTime, booking.endTime)}
       </span>
