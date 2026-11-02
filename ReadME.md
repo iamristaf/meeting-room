@@ -4,9 +4,6 @@ An internal web application for booking meeting rooms and shared resources such 
 
 Project Live Link: https://meeting-room-blue.vercel.app
 
-Admin Email - admin@roombook.com
-Admin Password -  Admin@12345
-
 ## Tech Stack
 
 | Component | Technology | 
