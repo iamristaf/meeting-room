@@ -1,44 +1,81 @@
-@import 'tailwindcss';
+@import "tailwindcss";
 
 @custom-variant dark (&:where(.dark, .dark *));
 
 :root {
   color-scheme: light;
-  --c-page: #f9fafb;
+  --c-page: #f3f4fb;
   --c-surface: #ffffff;
-  --c-subtle: #f9fafb;
-  --c-sunken: #f3f4f6;
-  --c-line: #e5e7eb;
-  --c-line-strong: #d1d5db;
-  --c-ink: #111827;
-  --c-ink-soft: #374151;
-  --c-muted: #6b7280;
-  --c-faint: #9ca3af;
-  --c-brand: #1f2937;
-  --c-brand-strong: #111827;
-  --c-brand-soft: #f3f4f6;
-  --c-brand-ink: #111827;
+  --c-subtle: #f7f8fd;
+  --c-sunken: #eceffa;
+  --c-line: #e1e5f3;
+  --c-line-strong: #c9cfe6;
+  --c-ink: #121733;
+  --c-ink-soft: #2b3358;
+  --c-muted: #596183;
+  --c-faint: #8a91ad;
+  --c-brand: #3f4fe0;
+  --c-brand-strong: #3140c4;
+  --c-brand-soft: #e9ecff;
+  --c-brand-ink: #2b37a8;
   --c-teal: #0f9d8f;
   --c-teal-soft: #dcf6f2;
   --c-teal-ink: #0b6b62;
   --c-amber: #e58a0b;
   --c-amber-soft: #fff0d2;
   --c-amber-ink: #8a4f03;
-  --c-rose: #dc2626;
-  --c-rose-soft: #fee2e2;
-  --c-rose-ink: #991b1b;
-  --c-green: #16a34a;
-  --c-green-soft: #dcfce7;
-  --c-green-ink: #166534;
+  --c-rose: #e0345e;
+  --c-rose-soft: #ffe3ea;
+  --c-rose-ink: #a3173d;
+  --c-green: #12a56b;
+  --c-green-soft: #dcf7ea;
+  --c-green-ink: #0b6d46;
   --c-sky: #1b8fd6;
   --c-sky-soft: #def1fd;
   --c-sky-ink: #0b5d93;
   --c-violet: #8a45e6;
   --c-violet-soft: #f0e6fe;
   --c-violet-ink: #5e24ad;
-  --c-hatch: rgba(17, 24, 39, 0.07);
-  --c-shadow:
-    0 1px 2px rgba(17, 24, 39, 0.05), 0 6px 18px -10px rgba(17, 24, 39, 0.18);
+  --c-hatch: rgba(18, 23, 51, 0.07);
+  --c-shadow: 0 1px 2px rgba(18, 23, 51, 0.05), 0 8px 24px -12px rgba(40, 50, 120, 0.18);
+}
+
+.dark {
+  color-scheme: dark;
+  --c-page: #0b0e1c;
+  --c-surface: #141932;
+  --c-subtle: #181e3a;
+  --c-sunken: #1c2342;
+  --c-line: #272f56;
+  --c-line-strong: #3a4575;
+  --c-ink: #eef0ff;
+  --c-ink-soft: #cfd5f3;
+  --c-muted: #9ba4cc;
+  --c-faint: #6f7aa6;
+  --c-brand: #6d7bff;
+  --c-brand-strong: #8a96ff;
+  --c-brand-soft: rgba(109, 123, 255, 0.17);
+  --c-brand-ink: #c4caff;
+  --c-teal: #2fd0bf;
+  --c-teal-soft: rgba(47, 208, 191, 0.15);
+  --c-teal-ink: #7ce9dc;
+  --c-amber: #f5a524;
+  --c-amber-soft: rgba(245, 165, 36, 0.16);
+  --c-amber-ink: #fbcd7c;
+  --c-rose: #ff5c84;
+  --c-rose-soft: rgba(255, 92, 132, 0.16);
+  --c-rose-ink: #ffaabf;
+  --c-green: #34d399;
+  --c-green-soft: rgba(52, 211, 153, 0.15);
+  --c-green-ink: #8bf0c3;
+  --c-sky: #4cb5f5;
+  --c-sky-soft: rgba(76, 181, 245, 0.15);
+  --c-sky-ink: #a5dcfb;
+  --c-violet: #b27cff;
+  --c-violet-soft: rgba(178, 124, 255, 0.16);
+  --c-violet-ink: #d8bcff;
+  --c-hatch: rgba(238, 240, 255, 0.09);
+  --c-shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 10px 28px -14px rgba(0, 0, 0, 0.6);
 }
 
 @theme inline {
@@ -75,9 +112,7 @@
   --color-violet-soft: var(--c-violet-soft);
   --color-violet-ink: var(--c-violet-ink);
   --shadow-card: var(--c-shadow);
-  --font-sans:
-    'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto,
-    'Helvetica Neue', Arial, sans-serif;
+  --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
 }
 
 body {
@@ -85,23 +120,111 @@ body {
   color: var(--c-ink-soft);
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
+  transition: background-color 0.2s ease, color 0.2s ease;
 }
 
-input[type='time']::-webkit-calendar-picker-indicator,
-input[type='date']::-webkit-calendar-picker-indicator {
+input[type="time"]::-webkit-calendar-picker-indicator,
+input[type="date"]::-webkit-calendar-picker-indicator {
   cursor: pointer;
 }
 
+.dark input[type="time"]::-webkit-calendar-picker-indicator,
+.dark input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(0.85);
+}
+
 .hatch {
-  background-image: repeating-linear-gradient(
-    135deg,
-    var(--c-hatch) 0 6px,
-    transparent 6px 12px
-  );
+  background-image: repeating-linear-gradient(135deg, var(--c-hatch) 0 6px, transparent 6px 12px);
 }
 
 .event-block {
   background: hsl(var(--hue) 85% 91%);
   border-color: hsl(var(--hue) 60% 52%);
   color: hsl(var(--hue) 60% 22%);
+}
+
+.dark .event-block {
+  background: hsl(var(--hue) 45% 24%);
+  border-color: hsl(var(--hue) 65% 58%);
+  color: hsl(var(--hue) 85% 90%);
+}
+
+.event-dot {
+  background: hsl(var(--hue) 65% 52%);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+}
+
+@theme {
+  --animate-rise: rise 0.4s cubic-bezier(0.2, 0.7, 0.2, 1) backwards;
+  --animate-pop: pop 0.16s ease-out backwards;
+  --animate-fade: fade 0.2s ease-out backwards;
+  --animate-slide-in: slide-in 0.25s cubic-bezier(0.2, 0.7, 0.2, 1) backwards;
+  --animate-toast: toast 0.3s cubic-bezier(0.2, 0.7, 0.2, 1) backwards;
+
+  @keyframes rise {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes pop {
+    from {
+      opacity: 0;
+      transform: scale(0.95);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  @keyframes fade {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes slide-in {
+    from {
+      transform: translateX(-100%);
+    }
+    to {
+      transform: translateX(0);
+    }
+  }
+
+  @keyframes toast {
+    from {
+      opacity: 0;
+      transform: translateY(16px) scale(0.98);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+  }
+}
+
+.theme-switching *,
+.theme-switching *::before,
+.theme-switching *::after {
+  transition:
+    background-color 0.3s ease,
+    border-color 0.3s ease,
+    color 0.3s ease,
+    fill 0.3s ease !important;
 }
