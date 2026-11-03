@@ -41,7 +41,7 @@ export default function ToastProvider({ children }) {
             key={toast.id}
             role="status"
             className={cn(
-              'flex items-start gap-3 rounded-xl border bg-surface p-3 text-sm text-ink shadow-xl',
+              'flex animate-toast items-start gap-3 rounded-xl border bg-surface p-3 text-sm text-ink shadow-xl',
               toast.type === 'success' ? 'border-green/50' : 'border-rose/50',
             )}
           >

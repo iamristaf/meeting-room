@@ -24,7 +24,7 @@ export default function ResourceCard({
         : `${bookedCount} ${bookedCount === 1 ? 'booking' : 'bookings'} on this day`
 
   return (
-    <article className="flex flex-col overflow-hidden rounded-2xl border border-line bg-surface shadow-card transition-shadow hover:shadow-lg">
+    <article className="flex flex-col overflow-hidden rounded-2xl border border-line bg-surface shadow-card transition-all duration-200 hover:-translate-y-1 hover:shadow-lg">
       <div className="relative">
         <ResourceImage
           resource={resource}

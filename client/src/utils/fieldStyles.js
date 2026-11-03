@@ -2,7 +2,7 @@ import cn from './cn'
 
 export default function inputClass(hasError) {
   return cn(
-    'w-full rounded-md border bg-white px-3 py-2 text-sm outline-none transition-colors placeholder:text-gray-400 focus:border-gray-800 focus:ring-1 focus:ring-gray-800 disabled:bg-gray-100 disabled:text-gray-500',
-    hasError ? 'border-red-500' : 'border-gray-300',
+    'w-full rounded-lg border bg-surface px-3 py-2 text-sm text-ink outline-none transition-colors placeholder:text-faint focus:border-brand focus:ring-2 focus:ring-brand/25 disabled:bg-sunken disabled:text-faint',
+    hasError ? 'border-rose' : 'border-line-strong',
   )
 }

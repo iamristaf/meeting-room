@@ -24,7 +24,7 @@ export default function Modal({
 
   return (
     <div
-      className="fixed inset-0 z-40 flex items-end justify-center bg-[#0b0e1c]/60 p-0 backdrop-blur-sm sm:items-center sm:p-4"
+      className="fixed inset-0 z-40 flex animate-fade items-end justify-center bg-[#0b0e1c]/60 p-0 backdrop-blur-sm sm:items-center sm:p-4"
       onMouseDown={onClose}
     >
       <div
@@ -33,7 +33,7 @@ export default function Modal({
         aria-label={title}
         onMouseDown={(event) => event.stopPropagation()}
         className={cn(
-          'max-h-[92vh] w-full overflow-y-auto rounded-t-2xl bg-surface p-5 shadow-2xl ring-1 ring-line sm:rounded-2xl',
+          'max-h-[92vh] w-full animate-pop overflow-y-auto rounded-t-2xl bg-surface p-5 shadow-2xl ring-1 ring-line sm:rounded-2xl',
           width,
         )}
       >
