@@ -1,9 +1,10 @@
 import { useState } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
-import { CalendarCheck } from 'lucide-react'
+import AuthShell from '../components/layout/AuthShell'
 import Button from '../components/ui/Button'
 import TextField from '../components/ui/TextField'
 import useAuth from '../hooks/useAuth'
+import { homePath } from '../utils/paths'
 import getErrorMessage from '../utils/errorMessage'
 import { validateLogin } from '../utils/validators'
 
@@ -30,8 +31,13 @@ export default function Login() {
 
     setSubmitting(true)
     try {
-      await login({ email: values.email.trim(), password: values.password })
-      navigate(location.state?.from?.pathname || '/', { replace: true })
+      const signedIn = await login({
+        email: values.email.trim(),
+        password: values.password,
+      })
+      navigate(location.state?.from?.pathname || homePath(signedIn), {
+        replace: true,
+      })
     } catch (error) {
       setServerError(getErrorMessage(error))
       setSubmitting(false)
@@ -39,40 +45,36 @@ export default function Login() {
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center px-4 py-10">
-      <div className="w-full max-w-sm">
-        <div className="mb-6 flex items-center justify-center gap-2 text-2xl font-bold text-gray-900">
-          <CalendarCheck className="size-8" />
-          RoomBook
+    <AuthShell>
+      <form
+        onSubmit={handleSubmit}
+        noValidate
+        className="space-y-4 rounded-2xl border border-line bg-surface p-6 shadow-card"
+      >
+        <div>
+          <h1 className="text-xl font-bold text-ink">Sign in</h1>
+          <p className="text-sm text-muted">Use your work email</p>
         </div>
-        <form
-          onSubmit={handleSubmit}
-          noValidate
-          className="space-y-4 rounded-lg border border-gray-200 bg-white p-6 shadow-sm"
-        >
-          <div>
-            <h1 className="text-xl font-bold text-gray-900">Sign in</h1>
-            <p className="text-sm text-gray-500">Use your work email</p>
-          </div>
 
-          {serverError && (
-            <p
-              role="alert"
-              className="rounded-md border border-red-200 bg-red-50 p-3 text-sm text-red-800"
-            >
-              {serverError}
-            </p>
-          )}
+        {serverError && (
+          <p
+            role="alert"
+            className="rounded-lg border border-rose/40 bg-rose-soft p-3 text-sm text-rose-ink"
+          >
+            {serverError}
+          </p>
+        )}
 
-          <TextField
-            label="Email"
-            type="email"
-            autoComplete="email"
-            placeholder="name@company.com"
-            value={values.email}
-            onChange={handleChange('email')}
-            error={errors.email}
-          />
+        <TextField
+          label="Email"
+          type="email"
+          autoComplete="email"
+          placeholder="name@company.com"
+          value={values.email}
+          onChange={handleChange('email')}
+          error={errors.email}
+        />
+        <div>
           <TextField
             label="Password"
             type="password"
@@ -81,31 +83,27 @@ export default function Login() {
             onChange={handleChange('password')}
             error={errors.password}
           />
-
-          <div className="text-right text-sm">
+          <p className="mt-1.5 text-right text-sm">
             <Link
               to="/forgot-password"
-              className="font-medium text-gray-900 underline"
+              className="font-semibold text-brand hover:underline"
             >
               Forgot password?
             </Link>
-          </div>
-
-          <Button type="submit" loading={submitting} className="w-full">
-            Sign in
-          </Button>
-
-          <p className="text-center text-sm text-gray-600">
-            No account yet?{' '}
-            <Link
-              to="/register"
-              className="font-medium text-gray-900 underline"
-            >
-              Register
-            </Link>
           </p>
-        </form>
-      </div>
-    </div>
+        </div>
+
+        <Button type="submit" loading={submitting} className="w-full">
+          Sign in
+        </Button>
+
+        <p className="text-center text-sm text-muted">
+          No account yet?{' '}
+          <Link to="/register" className="font-semibold text-brand underline">
+            Register
+          </Link>
+        </p>
+      </form>
+    </AuthShell>
   )
 }

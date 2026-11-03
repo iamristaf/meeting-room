@@ -27,6 +27,7 @@ export default function AuthProvider({ children }) {
   const startSession = useCallback(({ token, user: signedInUser }) => {
     localStorage.setItem(TOKEN_KEY, token)
     setUser(signedInUser)
+    return signedInUser
   }, [])
 
   const login = useCallback(

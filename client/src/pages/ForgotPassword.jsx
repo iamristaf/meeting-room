@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { CalendarCheck } from 'lucide-react'
+import { ArrowLeft, MailCheck } from 'lucide-react'
+import AuthShell from '../components/layout/AuthShell'
 import Button from '../components/ui/Button'
 import TextField from '../components/ui/TextField'
 import authService from '../services/authService'
@@ -10,23 +11,19 @@ import { validateEmail } from '../utils/validators'
 export default function ForgotPassword() {
   const [email, setEmail] = useState('')
   const [error, setError] = useState('')
-  const [message, setMessage] = useState('')
   const [submitting, setSubmitting] = useState(false)
+  const [sent, setSent] = useState(false)
 
   const handleSubmit = async (event) => {
     event.preventDefault()
-
-    const emailError = validateEmail(email)
-
-    if (emailError) {
-      setError(emailError)
-      return
-    }
+    const problem = validateEmail(email)
+    setError(problem)
+    if (problem) return
 
     setSubmitting(true)
     try {
-      const response = await authService.forgotPassword(email.trim())
-      setMessage(response.message)
+      await authService.forgotPassword(email.trim())
+      setSent(true)
     } catch (requestError) {
       setError(getErrorMessage(requestError))
     } finally {
@@ -35,58 +32,57 @@ export default function ForgotPassword() {
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center px-4 py-10">
-      <div className="w-full max-w-sm">
-        <div className="mb-6 flex items-center justify-center gap-2 text-2xl font-bold text-gray-900">
-          <CalendarCheck className="size-8" />
-          RoomBook
-        </div>
-        <form
-          onSubmit={handleSubmit}
-          noValidate
-          className="space-y-4 rounded-lg border border-gray-200 bg-white p-6 shadow-sm"
-        >
-          <div>
-            <h1 className="text-xl font-bold text-gray-900">Forgot password</h1>
-            <p className="text-sm text-gray-500">
-              Your administrator will set a new password for you
-            </p>
-          </div>
-
-          {message ? (
-            <p
-              role="status"
-              className="rounded-md border border-green-200 bg-green-50 p-3 text-sm text-green-800"
-            >
-              {message}
-            </p>
-          ) : (
-            <>
-              <TextField
-                label="Email"
-                type="email"
-                autoComplete="email"
-                placeholder="name@company.com"
-                value={email}
-                onChange={(event) => {
-                  setEmail(event.target.value)
-                  setError('')
-                }}
-                error={error}
-              />
-              <Button type="submit" loading={submitting} className="w-full">
-                Request reset
-              </Button>
-            </>
-          )}
-
-          <p className="text-center text-sm text-gray-600">
-            <Link to="/login" className="font-medium text-gray-900 underline">
-              Back to sign in
-            </Link>
-          </p>
-        </form>
+    <AuthShell>
+      <div className="space-y-4 rounded-2xl border border-line bg-surface p-6 shadow-card">
+        {sent ? (
+          <>
+            <span className="grid size-11 place-items-center rounded-xl bg-green-soft text-green-ink">
+              <MailCheck className="size-5" />
+            </span>
+            <div>
+              <h1 className="text-xl font-bold text-ink">Request sent</h1>
+              <p className="mt-1 text-sm text-muted">
+                If that email belongs to an account, your administrator has been
+                notified. They will set a new password and share it with you.
+              </p>
+            </div>
+          </>
+        ) : (
+          <form onSubmit={handleSubmit} noValidate className="space-y-4">
+            <div>
+              <h1 className="text-xl font-bold text-ink">Forgot password</h1>
+              <p className="text-sm text-muted">
+                Enter your work email and we will ask your administrator to
+                reset it.
+              </p>
+            </div>
+            <TextField
+              label="Email"
+              type="email"
+              autoComplete="email"
+              placeholder="name@company.com"
+              value={email}
+              onChange={(event) => {
+                setEmail(event.target.value)
+                setError('')
+              }}
+              error={error}
+            />
+            <Button type="submit" loading={submitting} className="w-full">
+              Send request
+            </Button>
+          </form>
+        )}
+        <p className="text-center text-sm">
+          <Link
+            to="/login"
+            className="inline-flex items-center gap-1.5 font-semibold text-brand hover:underline"
+          >
+            <ArrowLeft className="size-4" />
+            Back to sign in
+          </Link>
+        </p>
       </div>
-    </div>
+    </AuthShell>
   )
 }
