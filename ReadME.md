@@ -4,18 +4,9 @@ An internal web application for booking meeting rooms and shared resources such 
 
 Project Live Link: https://meeting-room-blue.vercel.app
 
-## Tech Stack
-
-| Component | Technology | 
-|---|---|
-| Frontend | React.js, Vite, Tailwind CSS |
-| Backend | Node.js, Express.js |
-| Database | PostgreSQL (Supabase) |
-| Authentication | JSON Web Tokens (JWT) |
-
 ## Current Development Status
 
-**Day 9 — Made enhanced UI, and added some themes. Made Admin panel more professional, and proper analytics.
+**Day 9 — Made enhanced UI, and added some themes. Made Admin panel more professional, and proper analytics.**
 
 ## Some Extra Features to add
 
