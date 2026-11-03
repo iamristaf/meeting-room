@@ -15,4 +15,4 @@ Project Live Link: https://meeting-room-blue.vercel.app
 
 ## Current Development Status
 
-**Day 8 — Almost all work has been done and working on some security issues and fixing bugs.**
+**Day 9 — Working on enhancing UI, and adding some themes. Making Admin panel more professional, and proper analytics.**
