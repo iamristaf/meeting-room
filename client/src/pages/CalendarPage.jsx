@@ -9,6 +9,7 @@ import PageHeader from '../components/ui/PageHeader'
 import ErrorMessage from '../components/ui/ErrorMessage'
 import PageLoader from '../components/ui/PageLoader'
 import useFetch from '../hooks/useFetch'
+import { readPreference } from '../hooks/usePreference'
 import resourceService from '../services/resourceService'
 import bookingService from '../services/bookingService'
 import { bookPath } from '../utils/paths'
@@ -50,7 +51,7 @@ const shiftCursor = (view, cursor, direction) => {
 
 export default function CalendarPage() {
   const navigate = useNavigate()
-  const [view, setView] = useState('day')
+  const [view, setView] = useState(() => readPreference('calendarView', 'day'))
   const [cursor, setCursor] = useState(() => startOfDay(new Date()))
   const [resourceId, setResourceId] = useState('')
   const [selectedBooking, setSelectedBooking] = useState(null)
