@@ -89,3 +89,28 @@ Table password_reset_requests {
   created_at timestamptz [not null, default: `now()`]
   resolved_at timestamptz
 }
+
+Table floors {
+  id uuid [pk, default: `gen_random_uuid()`]
+  name varchar(100) [not null]
+  width integer [not null, default: 1200]
+  height integer [not null, default: 800]
+  sort_order integer [not null, default: 0]
+  created_at timestamptz [not null, default: `now()`]
+}
+
+Table floor_items {
+  id uuid [pk, default: `gen_random_uuid()`]
+  floor_id uuid [not null, ref: > floors.id]
+  kind varchar(20) [not null, note: 'room, resource, wall, door, window, label or decor']
+  resource_id uuid [unique, ref: > resources.id]
+  x numeric [not null, default: 0]
+  y numeric [not null, default: 0]
+  w numeric [not null, default: 100]
+  h numeric [not null, default: 100]
+  rotation numeric [not null, default: 0]
+  shape varchar(20) [not null, default: 'rect']
+  label varchar(100) [not null, default: '']
+  icon varchar(30) [not null, default: '']
+  created_at timestamptz [not null, default: `now()`]
+}

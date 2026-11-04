@@ -139,3 +139,36 @@ alter table booking_restrictions enable row level security;
 alter table bookings enable row level security;
 alter table booking_history enable row level security;
 alter table room_resources enable row level security;
+
+create table if not exists floors (
+  id uuid primary key default gen_random_uuid(),
+  name varchar(100) not null,
+  width integer not null default 1200 check (width between 400 and 4000),
+  height integer not null default 800 check (height between 300 and 3000),
+  sort_order integer not null default 0,
+  created_at timestamptz not null default now()
+);
+
+create table if not exists floor_items (
+  id uuid primary key default gen_random_uuid(),
+  floor_id uuid not null references floors (id) on delete cascade,
+  kind varchar(20) not null check (kind in ('room', 'resource', 'wall', 'door', 'window', 'label', 'decor')),
+  resource_id uuid references resources (id) on delete cascade,
+  x numeric not null default 0,
+  y numeric not null default 0,
+  w numeric not null default 100 check (w > 0),
+  h numeric not null default 100 check (h > 0),
+  rotation numeric not null default 0,
+  shape varchar(20) not null default 'rect' check (shape in ('rect', 'ellipse')),
+  label varchar(100) not null default '',
+  icon varchar(30) not null default '',
+  created_at timestamptz not null default now(),
+  constraint bookable_needs_resource check ((kind in ('room', 'resource')) = (resource_id is not null))
+);
+
+create index if not exists floor_items_floor_idx on floor_items (floor_id);
+
+create unique index if not exists floor_items_resource_unique on floor_items (resource_id) where resource_id is not null;
+
+alter table floors enable row level security;
+alter table floor_items enable row level security;
