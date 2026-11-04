@@ -172,3 +172,11 @@ create unique index if not exists floor_items_resource_unique on floor_items (re
 
 alter table floors enable row level security;
 alter table floor_items enable row level security;
+
+alter table bookings add column if not exists checked_in_at timestamptz;
+alter table bookings add column if not exists auto_released boolean not null default false;
+
+alter table booking_history drop constraint if exists booking_history_action_check;
+alter table booking_history add constraint booking_history_action_check check (action in ('created', 'edited', 'cancelled', 'checked_in'));
+
+create index if not exists bookings_pending_checkin_idx on bookings (start_time) where status = 'confirmed' and checked_in_at is null and parent_booking_id is null;

@@ -4,6 +4,7 @@ import rateLimit from 'express-rate-limit'
 import helmet from 'helmet'
 import env from './config/env.js'
 import { errorHandler, routeNotFound } from './middleware/errorHandler.js'
+import { releaseBeforeRequest } from './middleware/releaseNoShows.js'
 import routes from './routes/index.js'
 
 const app = express()
@@ -22,7 +23,7 @@ app.use(
   }),
 )
 
-app.use('/api', routes)
+app.use('/api', releaseBeforeRequest, routes)
 app.use(routeNotFound)
 app.use(errorHandler)
 

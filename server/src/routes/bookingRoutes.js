@@ -37,5 +37,6 @@ router.get('/:id', bookings.getOne)
 router.get('/:id/history', bookings.history)
 router.put('/:id', validate(bookingUpdateSchema), bookings.update)
 router.patch('/:id/cancel', bookings.cancel)
+router.patch('/:id/check-in', bookings.checkIn)
 
 export default router

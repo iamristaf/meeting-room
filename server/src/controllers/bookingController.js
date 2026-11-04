@@ -81,3 +81,7 @@ export async function update(req, res) {
 export async function cancel(req, res) {
   res.json(await bookingService.cancelBooking(req.user, req.params.id))
 }
+
+export async function checkIn(req, res) {
+  res.json(await bookingService.checkInBooking(req.user, req.params.id))
+}

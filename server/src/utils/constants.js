@@ -30,3 +30,7 @@ export const RESOURCE_ASSET_KEYS = [
   'lounge',
   'other',
 ]
+
+export const CHECK_IN_GRACE_MINUTES = 10
+
+export const CHECK_IN_OPENS_MINUTES = 15

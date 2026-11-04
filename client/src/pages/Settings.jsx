@@ -10,6 +10,7 @@ import {
   Users,
 } from 'lucide-react'
 import PageHeader from '../components/ui/PageHeader'
+import CalendarSync from '../components/calendar/CalendarSync'
 import Avatar from '../components/ui/Avatar'
 import StatusBadge from '../components/ui/StatusBadge'
 import ToggleSwitch from '../components/ui/ToggleSwitch'
@@ -132,6 +133,13 @@ export default function Settings() {
               </Choice>
             ))}
           </div>
+        </Section>
+
+        <Section
+          title="Calendar sync"
+          text="Show your RoomBook bookings in Google, Outlook or Apple Calendar"
+        >
+          <CalendarSync />
         </Section>
 
         <Section title="Preferences">

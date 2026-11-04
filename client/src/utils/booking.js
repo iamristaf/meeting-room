@@ -1,4 +1,8 @@
-import { BOOKING_STATUS } from './constants'
+import {
+  BOOKING_STATUS,
+  CHECK_IN_GRACE_MINUTES,
+  CHECK_IN_OPENS_MINUTES,
+} from './constants'
 
 export function getDisplayStatus(booking) {
   if (booking.status === BOOKING_STATUS.cancelled) {
@@ -10,6 +14,34 @@ export function getDisplayStatus(booking) {
   }
 
   return BOOKING_STATUS.confirmed
+}
+
+export function getStatusLabel(booking) {
+  return booking.autoReleased ? 'released' : undefined
+}
+
+export function canCheckIn(booking, now = Date.now()) {
+  if (
+    booking.status !== BOOKING_STATUS.confirmed ||
+    booking.checkedInAt ||
+    booking.parentBookingId
+  ) {
+    return false
+  }
+
+  const opensAt =
+    new Date(booking.startTime).getTime() - CHECK_IN_OPENS_MINUTES * 60000
+
+  return now >= opensAt && now < new Date(booking.endTime).getTime()
+}
+
+export function getCheckInDeadline(booking) {
+  const base = Math.max(
+    new Date(booking.startTime).getTime(),
+    new Date(booking.createdAt).getTime(),
+  )
+
+  return new Date(base + CHECK_IN_GRACE_MINUTES * 60000)
 }
 
 export function canModifyBooking(booking) {

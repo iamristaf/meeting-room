@@ -1,6 +1,6 @@
 import BookingActions from './BookingActions'
 import StatusBadge from '../ui/StatusBadge'
-import { getDisplayStatus } from '../../utils/booking'
+import { getDisplayStatus, getStatusLabel } from '../../utils/booking'
 import { formatDate, formatTimeRange } from '../../utils/dateTime'
 
 function AddOnChips({ booking }) {
@@ -24,6 +24,7 @@ export default function BookingsTable({
   bookings,
   showUser = false,
   onCancel,
+  onCheckIn,
 }) {
   const headings = [
     showUser && 'User',
@@ -62,10 +63,17 @@ export default function BookingsTable({
                   {formatTimeRange(booking.startTime, booking.endTime)}
                 </td>
                 <td className="px-4 py-3">
-                  <StatusBadge status={getDisplayStatus(booking)} />
+                  <StatusBadge
+                    status={getDisplayStatus(booking)}
+                    label={getStatusLabel(booking)}
+                  />
                 </td>
                 <td className="px-4 py-3">
-                  <BookingActions booking={booking} onCancel={onCancel} />
+                  <BookingActions
+                    booking={booking}
+                    onCancel={onCancel}
+                    onCheckIn={onCheckIn}
+                  />
                 </td>
               </tr>
             ))}
@@ -81,7 +89,10 @@ export default function BookingsTable({
           >
             <div className="flex items-start justify-between gap-2">
               <p className="font-bold text-ink">{booking.resourceName}</p>
-              <StatusBadge status={getDisplayStatus(booking)} />
+              <StatusBadge
+                status={getDisplayStatus(booking)}
+                label={getStatusLabel(booking)}
+              />
             </div>
             <AddOnChips booking={booking} />
             {showUser && <p className="mt-1 text-muted">{booking.userName}</p>}
@@ -90,7 +101,11 @@ export default function BookingsTable({
               {formatTimeRange(booking.startTime, booking.endTime)}
             </p>
             <div className="mt-3">
-              <BookingActions booking={booking} onCancel={onCancel} />
+              <BookingActions
+                booking={booking}
+                onCancel={onCancel}
+                onCheckIn={onCheckIn}
+              />
             </div>
           </li>
         ))}

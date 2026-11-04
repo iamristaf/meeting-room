@@ -228,3 +228,9 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     color 0.3s ease,
     fill 0.3s ease !important;
 }
+
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}

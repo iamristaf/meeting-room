@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { CalendarX } from 'lucide-react'
 import PageHeader from '../components/ui/PageHeader'
@@ -7,11 +7,13 @@ import EmptyState from '../components/ui/EmptyState'
 import BookingsTable from '../components/booking/BookingsTable'
 import CancelBookingDialog from '../components/booking/CancelBookingDialog'
 import useFetch from '../hooks/useFetch'
+import useToast from '../hooks/useToast'
 import bookingService from '../services/bookingService'
 import { BOOKING_STATUS } from '../utils/constants'
 import { getDisplayStatus } from '../utils/booking'
 import buttonClass from '../utils/buttonStyles'
 import cn from '../utils/cn'
+import getErrorMessage from '../utils/errorMessage'
 
 const tabs = [
   { key: 'upcoming', label: 'Upcoming', status: BOOKING_STATUS.confirmed },
@@ -22,7 +24,13 @@ const tabs = [
 export default function MyBookings() {
   const [activeTab, setActiveTab] = useState('upcoming')
   const [bookingToCancel, setBookingToCancel] = useState(null)
+  const toast = useToast()
   const { data, loading, error, reload } = useFetch(bookingService.listMine)
+
+  useEffect(() => {
+    const timer = setInterval(reload, 30000)
+    return () => clearInterval(timer)
+  }, [reload])
 
   const visibleBookings = useMemo(() => {
     const tab = tabs.find((item) => item.key === activeTab)
@@ -37,6 +45,16 @@ export default function MyBookings() {
 
   const handleCancelled = () => {
     setBookingToCancel(null)
+    reload()
+  }
+
+  const handleCheckIn = async (booking) => {
+    try {
+      await bookingService.checkIn(booking.id)
+      toast.success('Checked in. Enjoy your meeting')
+    } catch (error) {
+      toast.error(getErrorMessage(error))
+    }
     reload()
   }
 
@@ -79,6 +97,7 @@ export default function MyBookings() {
           <BookingsTable
             bookings={visibleBookings}
             onCancel={setBookingToCancel}
+            onCheckIn={handleCheckIn}
           />
         )}
       </QueryState>

@@ -7,6 +7,7 @@ const bookingService = {
   get: (id) => unwrap(api.get(`/bookings/${id}`)),
   create: (values) => unwrap(api.post('/bookings', values)),
   update: (id, values) => unwrap(api.put(`/bookings/${id}`, values)),
+  checkIn: (id) => unwrap(api.patch(`/bookings/${id}/check-in`)),
   cancel: (id) => unwrap(api.patch(`/bookings/${id}/cancel`)),
 }
 

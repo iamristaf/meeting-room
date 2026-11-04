@@ -6,10 +6,16 @@ import {
   insertBooking,
   listChildBookings,
   markCancelled,
+  markCheckedIn,
   presentBookings,
+  releaseUncheckedBookings,
   updateBookingTimes,
 } from '../models/bookingModel.js'
 import { findResource, findResourcesByIds } from '../models/resourceModel.js'
+import {
+  CHECK_IN_GRACE_MINUTES,
+  CHECK_IN_OPENS_MINUTES,
+} from '../utils/constants.js'
 import { conflict, forbidden, invalid, notFound } from '../utils/httpError.js'
 import { assertAddOnAllowed, assertBookingAllowed } from './bookingRules.js'
 
@@ -282,5 +288,81 @@ export function cancelBooking(user, id) {
       db,
     )
     return present(id, user, db)
+  })
+}
+
+export function checkInBooking(user, id) {
+  return inTransaction(async (db) => {
+    const row = await findBookingRow(id, db, { lock: true })
+
+    if (!row) {
+      throw notFound('Booking not found')
+    }
+
+    if (row.parent_booking_id) {
+      throw conflict('Check in to the room booking instead.')
+    }
+
+    if (row.user_id !== user.id && user.role !== 'admin') {
+      throw forbidden('Only the person who booked can check in')
+    }
+
+    if (row.status !== 'confirmed') {
+      throw conflict(
+        row.auto_released
+          ? 'This booking was released because nobody checked in on time.'
+          : 'Only confirmed bookings can be checked in.',
+      )
+    }
+
+    if (row.checked_in_at) {
+      return present(id, user, db)
+    }
+
+    const now = Date.now()
+    const opensAt =
+      new Date(row.start_time).getTime() - CHECK_IN_OPENS_MINUTES * 60000
+
+    if (now < opensAt) {
+      throw conflict(
+        `Check-in opens ${CHECK_IN_OPENS_MINUTES} minutes before the start time.`,
+      )
+    }
+
+    if (now >= new Date(row.end_time).getTime()) {
+      throw conflict('This booking has already ended.')
+    }
+
+    await markCheckedIn(id, db)
+    await addHistory(
+      {
+        bookingId: id,
+        changedBy: user.id,
+        action: 'checked_in',
+        details: 'Checked in',
+      },
+      db,
+    )
+    return present(id, user, db)
+  })
+}
+
+export function releaseNoShows() {
+  return inTransaction(async (db) => {
+    const released = await releaseUncheckedBookings(CHECK_IN_GRACE_MINUTES, db)
+
+    for (const booking of released) {
+      await addHistory(
+        {
+          bookingId: booking.id,
+          changedBy: booking.user_id,
+          action: 'cancelled',
+          details: `Released automatically: no check-in within ${CHECK_IN_GRACE_MINUTES} minutes`,
+        },
+        db,
+      )
+    }
+
+    return released.length
   })
 }

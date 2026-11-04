@@ -199,3 +199,26 @@ export async function dismissResetRequest(id) {
   )
   return rowCount > 0
 }
+
+export async function getCalendarToken(userId) {
+  const { rows } = await pool.query(
+    'select calendar_token from users where id = $1',
+    [userId],
+  )
+  return rows[0]?.calendar_token ?? null
+}
+
+export async function saveCalendarToken(userId, token) {
+  await pool.query('update users set calendar_token = $2 where id = $1', [
+    userId,
+    token,
+  ])
+}
+
+export async function findUserByCalendarToken(token) {
+  const { rows } = await pool.query(
+    `select ${columns} from users where calendar_token = $1 and is_active`,
+    [token],
+  )
+  return toUser(rows[0])
+}

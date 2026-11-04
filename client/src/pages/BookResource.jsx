@@ -55,6 +55,7 @@ export default function BookResource() {
                 start: startParam ? timeToMinutes(startParam) : null,
                 duration: pickDefaultDuration(
                   buildDurations(data.restrictions),
+                  Number(searchParams.get('duration')) || undefined,
                 ),
                 addOnIds: [],
                 purpose: '',

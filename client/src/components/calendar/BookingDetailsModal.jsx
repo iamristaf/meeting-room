@@ -1,7 +1,11 @@
 import Modal from '../ui/Modal'
 import StatusBadge from '../ui/StatusBadge'
-import { getDisplayStatus } from '../../utils/booking'
-import { formatLongDate, formatTimeRange } from '../../utils/dateTime'
+import { getDisplayStatus, getStatusLabel } from '../../utils/booking'
+import {
+  formatLongDate,
+  formatTime,
+  formatTimeRange,
+} from '../../utils/dateTime'
 
 export default function BookingDetailsModal({ booking, onClose }) {
   const rows = [
@@ -16,6 +20,11 @@ export default function BookingDetailsModal({ booking, onClose }) {
         .join(', '),
     ],
     booking.purpose && ['Purpose', booking.purpose],
+    booking.checkedInAt && ['Checked in', formatTime(booking.checkedInAt)],
+    booking.autoReleased && [
+      'Note',
+      'Released because nobody checked in on time',
+    ],
   ].filter(Boolean)
 
   return (
@@ -30,7 +39,10 @@ export default function BookingDetailsModal({ booking, onClose }) {
         <div className="flex justify-between gap-4">
           <dt className="text-muted">Status</dt>
           <dd>
-            <StatusBadge status={getDisplayStatus(booking)} />
+            <StatusBadge
+              status={getDisplayStatus(booking)}
+              label={getStatusLabel(booking)}
+            />
           </dd>
         </div>
       </dl>

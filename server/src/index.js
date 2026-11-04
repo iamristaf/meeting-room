@@ -1,6 +1,7 @@
 import app from './app.js'
 import pool from './config/db.js'
 import env from './config/env.js'
+import { runRelease } from './middleware/releaseNoShows.js'
 
 try {
   await pool.query('select 1')
@@ -13,7 +14,10 @@ const server = app.listen(env.port, () => {
   console.log(`API running on port ${env.port}`)
 })
 
+const releaseTimer = setInterval(runRelease, 60000)
+
 const shutDown = () => {
+  clearInterval(releaseTimer)
   server.close(async () => {
     await pool.end()
     process.exit(0)

@@ -6,7 +6,7 @@ const baseSelect = `
   select b.id, b.resource_id, r.name as resource_name, r.type as resource_type, r.asset_key as resource_asset_key,
          b.user_id, u.name as user_name, u.email as user_email,
          b.start_time, b.end_time, b.purpose, b.status, b.created_at, b.parent_booking_id,
-         r.is_active as resource_active
+         b.checked_in_at, b.auto_released, r.is_active as resource_active
   from bookings b
   join resources r on r.id = b.resource_id
   join users u on u.id = b.user_id`
@@ -48,6 +48,8 @@ export function toBooking(row, viewer, addOns = []) {
     resourceActive: row.resource_active,
     createdAt: row.created_at,
     parentBookingId: row.parent_booking_id,
+    checkedInAt: row.checked_in_at,
+    autoReleased: row.auto_released,
     addOns,
   }
 }
@@ -290,6 +292,37 @@ export async function markCancelled(id, cancelledBy, db) {
      where id = $1 or (parent_booking_id = $1 and status = 'confirmed')`,
     [id, cancelledBy],
   )
+}
+
+export async function markCheckedIn(id, db) {
+  await db.query('update bookings set checked_in_at = now() where id = $1', [
+    id,
+  ])
+}
+
+export async function releaseUncheckedBookings(graceMinutes, db) {
+  const { rows } = await db.query(
+    `update bookings
+     set status = 'cancelled', auto_released = true
+     where status = 'confirmed'
+       and parent_booking_id is null
+       and checked_in_at is null
+       and end_time > now()
+       and greatest(start_time, created_at) + make_interval(mins => $1) <= now()
+     returning id, user_id, start_time, end_time`,
+    [graceMinutes],
+  )
+
+  if (rows.length) {
+    await db.query(
+      `update bookings
+       set status = 'cancelled', auto_released = true
+       where parent_booking_id = any($1::uuid[]) and status = 'confirmed'`,
+      [rows.map((row) => row.id)],
+    )
+  }
+
+  return rows
 }
 
 export async function addHistory(

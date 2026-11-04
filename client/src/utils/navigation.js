@@ -6,6 +6,8 @@ import {
   Clock,
   DoorOpen,
   LayoutDashboard,
+  Map as MapIcon,
+  PencilRuler,
   ListChecks,
   Package,
   SlidersHorizontal,
@@ -15,6 +17,7 @@ import {
 export const memberLinks = [
   { to: '/rooms', label: 'Meeting rooms', icon: DoorOpen },
   { to: '/resources', label: 'Resources', icon: Boxes },
+  { to: '/floor-plan', label: 'Floor plan', icon: MapIcon },
   { to: '/calendar', label: 'Calendar', icon: CalendarDays },
   { to: '/bookings', label: 'My bookings', icon: ClipboardList },
 ]
@@ -35,6 +38,11 @@ export const adminSections = [
     links: [
       { to: '/admin/rooms', label: 'Manage rooms', icon: Building2 },
       { to: '/admin/resources', label: 'Manage resources', icon: Package },
+      {
+        to: '/admin/floor-plan',
+        label: 'Floor plan editor',
+        icon: PencilRuler,
+      },
       { to: '/admin/employees', label: 'Employees', icon: Users },
       { to: '/admin/bookings', label: 'All bookings', icon: ListChecks },
       { to: '/admin/hours', label: 'Operating hours', icon: Clock },

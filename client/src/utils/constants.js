@@ -35,3 +35,7 @@ export const DEFAULT_RESTRICTIONS = {
 }
 
 export const SLOT_STEP_OPTIONS = [15, 30, 60]
+
+export const CHECK_IN_GRACE_MINUTES = 10
+
+export const CHECK_IN_OPENS_MINUTES = 15
