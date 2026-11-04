@@ -3,6 +3,7 @@ import pool from '../config/db.js'
 import authRoutes from './authRoutes.js'
 import availabilityRoutes from './availabilityRoutes.js'
 import bookingRoutes from './bookingRoutes.js'
+import floorRoutes from './floorRoutes.js'
 import resourceRoutes from './resourceRoutes.js'
 import userRoutes from './userRoutes.js'
 
@@ -18,5 +19,6 @@ router.use('/resources', resourceRoutes)
 router.use('/bookings', bookingRoutes)
 router.use('/availability', availabilityRoutes)
 router.use('/users', userRoutes)
+router.use('/floors', floorRoutes)
 
 export default router
