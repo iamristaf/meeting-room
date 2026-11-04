@@ -6,10 +6,10 @@ Project Live Link: https://meeting-room-blue.vercel.app
 
 ## Current Development Status
 
-**Day 9 — Made enhanced UI, and added some themes. Made Admin panel more professional, and proper analytics.**
+**Day 10 — Working on making a custom 2D map for any organisation by admin and employees can book from there as well.**
 
 ## Some Extra Features to add
 
-- [ ] 2D Map of office for bookings
+- [ ] 2D Map of office for bookings (Currently Working on this)
 - [ ] Google, Microsoft, Apple Calendar Sync
 - [ ] If someone who booked doesn't check in within 10 minutes of booking, room or resource will be marked free
